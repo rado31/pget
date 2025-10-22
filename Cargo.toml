@@ -1,0 +1,20 @@
+[package]
+name = "pget"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+clap = { version = "4.5.50", features = ["derive"] }
+copypasta = { version = "0.10.2", features = ["wayland"] }
+dirs = "6.0.0"
+serde = { version = "1.0.228", features = ["derive"] }
+toml = "0.9.8"
+
+[profile.release]
+opt-level = 3
+debug = false
+lto = "fat"
+codegen-units = 1
+panic = "abort"
+strip = true
+overflow-checks = false
