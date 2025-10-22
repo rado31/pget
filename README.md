@@ -55,7 +55,7 @@ Example file layout (TOML):
 
 ```toml
 [servers]
-server_1 = "s3cr3tP@ssw0rd",
+server_1 = "s3cr3tP@ssw0rd"
 db-primary = "dbP@ss!"
 ```
 
