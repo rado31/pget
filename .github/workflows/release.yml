@@ -18,7 +18,8 @@ jobs:
         run: cargo build --release
       - name: Upload a release file
         run: |
-          gh release upload $TAG target/release/pget
+          tar cfz linux.tar.gz -C target/release pget
+          gh release upload $TAG linux.tar.gz
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
           TAG: ${{ github.ref_name }}
@@ -32,7 +33,8 @@ jobs:
         run: cargo build --release
       - name: Upload a release file
         run: |
-          gh release upload $TAG target/release/pget
+          tar cfz macos_darwin.tar.gz -C target/release pget
+          gh release upload $TAG macos_darwin.tar.gz
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
           TAG: ${{ github.ref_name }}
@@ -47,7 +49,9 @@ jobs:
       - name: Upload a release file
         shell: bash
         run: |
-          gh release upload $TAG target/release/pget.exe
+          cd target/release
+          7z a windows.zip pget.exe
+          gh release upload $TAG windows.zip
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
           TAG: ${{ github.ref_name }}
