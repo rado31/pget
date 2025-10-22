@@ -8,7 +8,6 @@ mod utils;
 
 fn main() {
     let args = cli::Args::new();
-
     let path = utils::get_file_path();
 
     if !path.exists() {
@@ -25,27 +24,22 @@ fn main() {
         .expect("[servers] section missing");
 
     if !args.add {
-        match servers.get(&args.name) {
-            Some(password) => {
-                if env::var("WAYLAND_DISPLAY").is_ok() {
-                    utils::copy_with_wl(password.as_str().unwrap_or(""));
-                    return;
-                };
+        if let Some(password) = servers.get(&args.name) {
+            let password = password.as_str().unwrap_or("");
 
-                let mut ctx = ClipboardContext::new().unwrap();
-                let pass = password.as_str().unwrap_or("").to_string();
-                ctx.set_contents(pass).unwrap();
-            }
-            None => println!("There is no password for this server"),
-        };
+            if env::var("WAYLAND_DISPLAY").is_ok() {
+                utils::copy_with_wl(password);
+                return;
+            };
 
+            let mut ctx = ClipboardContext::new().unwrap();
+            ctx.set_contents(password.to_string()).unwrap();
+        }
+
+        println!("Doesn't exist");
         return;
     }
 
-    let val = Value::String(args.password.unwrap());
-
-    servers.insert(args.name, val);
-
-    let new_toml = toml::to_string_pretty(&data).unwrap();
-    fs::write(&path, new_toml).unwrap();
+    servers.insert(args.name, Value::String(args.password.unwrap()));
+    fs::write(&path, toml::to_string_pretty(&data).unwrap()).unwrap();
 }
