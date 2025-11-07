@@ -34,6 +34,8 @@ fn main() {
 
             let mut ctx = ClipboardContext::new().unwrap();
             ctx.set_contents(password.to_string()).unwrap();
+            println!("Set to clipboard");
+            return;
         }
 
         println!("Doesn't exist");
